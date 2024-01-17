@@ -1,7 +1,7 @@
-import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Module } from '@nestjs/common'
+import { ConfigModule, ConfigService } from '@nestjs/config'
 import { TypeOrmModule } from '@nestjs/typeorm'
-import Product from './Entities/product.entity';
+import Product from './Entities/product.entity'
 
 @Module({
   imports: [
@@ -25,4 +25,4 @@ import Product from './Entities/product.entity';
 })
 class DatabaseModule {}
 
-export default DatabaseModule;
+export default DatabaseModule

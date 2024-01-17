@@ -1,10 +1,7 @@
 {
   "name": "ims-project",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
   "private": true,
-  "license": "UNLICENSED",
   "scripts": {
     "prepare": "husky install",
     "prebuild": "rimraf dist",

@@ -1,50 +1,50 @@
-import { Column, Entity, PrimaryColumn, CreateDateColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, CreateDateColumn } from 'typeorm'
 
 @Entity()
 class Product {
   @PrimaryColumn('varchar', {
     length: 255,
   })
-  id!: string;
+  id!: string
 
   @Column()
-  cost!: number;
+  cost!: number
 
   @Column()
-  units!: number;
+  units!: number
 
   @Column()
-  sellingPrice!: number;
+  sellingPrice!: number
 
   @CreateDateColumn()
-  purchaseDate!: Date;
+  purchaseDate!: Date
 
   @Column('integer')
-  reOrderQuantity!: number;
+  reOrderQuantity!: number
 
   @Column('integer') // TODO: set level (re-order point), alert when level reached, including the length of time it took to reach minimum order quantity —> email, colour change
-  restockLevel!: number;
+  restockLevel!: number
 
   @Column()
-  image!: string;
+  image!: string
 
   @Column()
-  productName!: string;
+  productName!: string
 
   @Column('varchar')
-  sku!: string;
+  sku!: string
 
   @Column('varchar')
-  type!: string;
+  type!: string
 
   @Column('integer', { default: 'SP- CP' }) // TODO: update default logic
-  repairMargin!: number;
+  repairMargin!: number
 
   @Column('text')
-  csv!: string;
+  csv!: string
 
   @Column('text')
-  location!: string;
+  location!: string
 
   //   @Column('json') // TODO: possibility of different views
   //   category!: Category[];
@@ -56,4 +56,4 @@ class Product {
   //   images!: Image[];
 }
 
-export default Product;
+export default Product
