@@ -24,7 +24,7 @@ class BundlesService {
       },
     })
 
-    bundle.products = products.map(e => ({
+    bundle.products = products.map((e) => ({
       id: e.id,
       units: e.units,
     }))

@@ -14,7 +14,7 @@ import BundlesModule from './Bundle/bundles.module'
     DatabaseModule,
     ProductsModule,
     BundlesModule,
-    PriceHistoryModule
+    PriceHistoryModule,
   ],
   controllers: [AppController],
 })

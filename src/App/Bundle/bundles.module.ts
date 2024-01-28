@@ -8,7 +8,13 @@ import ProductsRepository from '../Products/products.repository'
 
 @Module({
   controllers: [BundlesController],
-  providers: [BundlesService, BundlesRepository, PriceHistoryRepository, PriceHistoryService, ProductsRepository],
+  providers: [
+    BundlesService,
+    BundlesRepository,
+    PriceHistoryRepository,
+    PriceHistoryService,
+    ProductsRepository,
+  ],
   exports: [BundlesService],
 })
 class BundlesModule {}
