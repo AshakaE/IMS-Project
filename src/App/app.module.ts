@@ -2,6 +2,9 @@ import { Module } from '@nestjs/common'
 import { ConfigModule } from '@nestjs/config'
 import DatabaseModule from '../Database/database.module'
 import { AppController } from './app.controller'
+import ProductsModule from './Products/product.module'
+import PriceHistoryModule from './PriceHistory/priceHistory.module'
+import BundlesModule from './Bundle/bundles.module'
 
 @Module({
   imports: [
@@ -9,10 +12,11 @@ import { AppController } from './app.controller'
       isGlobal: true,
     }),
     DatabaseModule,
-    // ProductsModule,
+    ProductsModule,
+    BundlesModule,
+    PriceHistoryModule
   ],
   controllers: [AppController],
-  //   providers: [AppService],
 })
 class AppModule {}
 

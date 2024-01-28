@@ -1,4 +1,14 @@
-import { Column, Entity, PrimaryColumn, CreateDateColumn } from 'typeorm'
+/* eslint-disable import/no-cycle */
+import {
+  Column,
+  Entity,
+  PrimaryColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  OneToMany,
+} from 'typeorm'
+import Category from './category.entity'
+import BinCard from './bin.entity'
 
 @Entity()
 class Product {
@@ -13,6 +23,12 @@ class Product {
   @Column()
   units!: number
 
+  @Column() // depends on location
+  tax!: number
+
+  @Column({ type: 'decimal', precision: 5, scale: 2 }) // in percent
+  discount!: number
+
   @Column()
   sellingPrice!: number
 
@@ -23,10 +39,7 @@ class Product {
   reOrderQuantity!: number
 
   @Column('integer') // TODO: set level (re-order point), alert when level reached, including the length of time it took to reach minimum order quantity —> email, colour change
-  restockLevel!: number
-
-  @Column()
-  image!: string
+  reStockLevel!: number
 
   @Column()
   productName!: string
@@ -37,7 +50,7 @@ class Product {
   @Column('varchar')
   type!: string
 
-  @Column('integer', { default: 'SP- CP' }) // TODO: update default logic
+  @Column('integer')
   repairMargin!: number
 
   @Column('text')
@@ -46,14 +59,20 @@ class Product {
   @Column('text')
   location!: string
 
-  //   @Column('json') // TODO: possibility of different views
-  //   category!: Category[];
+  @Column('json')
+  category!: Category[]
 
-  //   @Column('text')
-  //   binCard!: string;
+  @CreateDateColumn()
+  created!: Date
 
-  //   @Column('json', { nullable: true }) // TODO: possibility of different views
-  //   images!: Image[];
+  @UpdateDateColumn()
+  updated!: Date
+
+  @Column('json', { nullable: true }) // TODO: possibility of different views
+  images!: string[]
+
+  @OneToMany(() => BinCard, binCard => binCard.product)
+  binCards!: BinCard[]
 }
 
 export default Product
