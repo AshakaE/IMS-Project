@@ -21,7 +21,7 @@ class Product {
   @Column()
   units!: number
 
-  @Column({default: 0}) // depends on location
+  @Column({ default: 0 }) // depends on location
   tax?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 }) // in percent
@@ -57,8 +57,8 @@ class Product {
   @Column('text')
   location!: string
 
-//   @Column('json')
-//   category!: Category[]
+  //   @Column('json')
+  //   category!: Category[]
 
   @CreateDateColumn()
   created!: Date
@@ -69,7 +69,10 @@ class Product {
   @Column('json', { nullable: true }) // TODO: possibility of different views
   images!: string[]
 
-  @OneToMany(() => BinCard, binCard => binCard.product)
+  @OneToMany(
+    () => BinCard,
+    (binCard) => binCard.product,
+  )
   binCards!: BinCard[]
 }
 
