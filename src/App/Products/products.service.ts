@@ -13,6 +13,14 @@ class ProductsService {
     private readonly priceHistoryService: PriceHistoryService,
   ) {}
 
+  async products() {
+    return this.productsRepository.find({ take: 10 })
+  }
+
+  async product(id: string) {
+    return this.productsRepository.findOneBy({ id })
+  }
+
   async createProduct(product: CreateProductDto) {
     const newProduct = this.productsRepository.create({
       ...product,

@@ -2,19 +2,17 @@
 import {
   Column,
   Entity,
-  PrimaryColumn,
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm'
-import Category from './category.entity'
+// import Category from './category.entity'
 import BinCard from './bin.entity'
 
 @Entity()
 class Product {
-  @PrimaryColumn('varchar', {
-    length: 255,
-  })
+  @PrimaryGeneratedColumn('uuid')
   id!: string
 
   @Column()
@@ -23,11 +21,11 @@ class Product {
   @Column()
   units!: number
 
-  @Column() // depends on location
-  tax!: number
+  @Column({default: 0}) // depends on location
+  tax?: number
 
-  @Column({ type: 'decimal', precision: 5, scale: 2 }) // in percent
-  discount!: number
+  @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 }) // in percent
+  discount?: number
 
   @Column()
   sellingPrice!: number
@@ -38,8 +36,8 @@ class Product {
   @Column('integer')
   reOrderQuantity!: number
 
-  @Column('integer') // TODO: set level (re-order point), alert when level reached, including the length of time it took to reach minimum order quantity —> email, colour change
-  reStockLevel!: number
+  @Column('integer', { default: 0 }) // TODO: set level (re-order point), alert when level reached, including the length of time it took to reach minimum order quantity —> email, colour change
+  reStockLevel?: number
 
   @Column()
   productName!: string
@@ -59,8 +57,8 @@ class Product {
   @Column('text')
   location!: string
 
-  @Column('json')
-  category!: Category[]
+//   @Column('json')
+//   category!: Category[]
 
   @CreateDateColumn()
   created!: Date
@@ -71,10 +69,7 @@ class Product {
   @Column('json', { nullable: true }) // TODO: possibility of different views
   images!: string[]
 
-  @OneToMany(
-    () => BinCard,
-    (binCard) => binCard.product,
-  )
+  @OneToMany(() => BinCard, binCard => binCard.product)
   binCards!: BinCard[]
 }
 

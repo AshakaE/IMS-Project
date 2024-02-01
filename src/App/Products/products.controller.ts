@@ -20,12 +20,12 @@ class ProductsController {
 
   @Get()
   async getProducts(): Promise<Product[]> {
-    return [new Product()]
+    return this.productsService.products()
   }
 
   @Get(':id')
-  async getProduct(): Promise<Product> {
-    return new Product()
+  async getProduct(@Param('id') id: string): Promise<Product | null> {
+    return this.productsService.product(id)
   }
 
   @Post('/add')
@@ -37,9 +37,9 @@ class ProductsController {
   async updateProduct(
     @Request() req: any,
     @Param('id') id: string,
-    @Body() updatedData: Partial<Product>,
+    @Body() product: CreateProductDto,
   ) {
-    return this.productsService.updateProduct(id, updatedData)
+    return this.productsService.updateProduct(id, product)
   }
 }
 
