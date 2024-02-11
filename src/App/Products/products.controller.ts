@@ -56,7 +56,7 @@ class ProductsController {
       if (product?.sellingPrice < product?.cost) {
         return res.status(HttpStatus.NOT_FOUND).json({
           status: HttpStatus.NOT_FOUND,
-          message: `Selling price cannot be less than cost`,
+          message: 'Selling price cannot be less than cost',
         })
       }
       const newProduct = await this.productsService.createProduct(product)
@@ -92,7 +92,7 @@ class ProductsController {
     if (updatedProduct) {
       return res.status(HttpStatus.CREATED).json({
         status: HttpStatus.CREATED,
-        message: `Product updated successfully`,
+        message: 'Product updated successfully',
       })
     }
     return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
