@@ -1,6 +1,5 @@
 import {
   IsArray,
-  IsDateString,
   IsInt,
   IsNotEmpty,
   IsString,
@@ -8,10 +7,22 @@ import {
 } from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
+export class BundleProuctUnits {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  id!: string
+
+  @IsNotEmpty()
+  @IsInt()
+  @Min(1)
+  @ApiProperty()
+  units!: number
+}
 class CreateBundleDto {
   @IsNotEmpty()
   @IsInt()
-  @Min(0)
+  @Min(1)
   @ApiProperty()
   quantity!: number
 
@@ -22,9 +33,8 @@ class CreateBundleDto {
   sellingPrice!: number
 
   @IsNotEmpty()
-  @IsDateString()
   @ApiProperty()
-  constPrice!: Date
+  costPrice!: number
 
   @IsNotEmpty()
   @IsString()
@@ -39,8 +49,8 @@ class CreateBundleDto {
 
   @IsNotEmpty()
   @IsArray()
-  @ApiProperty()
-  productIds!: number[]
+  @ApiProperty({ type: [BundleProuctUnits] })
+  productIds!: BundleProuctUnits[]
 }
 
 export default CreateBundleDto

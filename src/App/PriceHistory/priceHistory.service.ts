@@ -18,20 +18,15 @@ class PriceHistoryService {
 
   async updatePriceHistory(priceUpdateData: PriceUpdateData): Promise<void> {
     const { id, updatedData, entity, type } = priceUpdateData
-    if (
-      updatedData.sellingPrice !== undefined &&
-      updatedData.sellingPrice !== entity.sellingPrice
-    ) {
-      const newPriceHistory = this.priceHistory.create({
-        entityId: id,
-        oldPrice: entity.sellingPrice,
-        newPrice: updatedData.sellingPrice,
-        type,
-        effectiveDate: new Date(),
-      })
+    const newPriceHistory = this.priceHistory.create({
+      entityId: id,
+      oldPrice: entity.sellingPrice,
+      newPrice: updatedData.sellingPrice,
+      type,
+      effectiveDate: new Date(),
+    })
 
-      await this.priceHistory.save(newPriceHistory)
-    }
+    await this.priceHistory.save(newPriceHistory)
   }
 }
 

@@ -7,15 +7,13 @@ import {
   ManyToMany,
   CreateDateColumn,
   UpdateDateColumn,
-  PrimaryColumn,
+  PrimaryGeneratedColumn,
 } from 'typeorm'
 import Product from './product.entity'
 
 @Entity()
 class Bundle {
-  @PrimaryColumn('varchar', {
-    length: 255,
-  })
+  @PrimaryGeneratedColumn('uuid')
   id!: string
 
   @Column()

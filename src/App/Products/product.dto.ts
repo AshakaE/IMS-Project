@@ -1,24 +1,45 @@
-import { IsDateString, IsInt, IsNotEmpty, IsString, Min } from 'class-validator'
+import {
+  IsDateString,
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Min,
+} from 'class-validator'
 import { ApiProperty } from '@nestjs/swagger'
 
+export enum ProductCategory {
+  ELECTRONICS = 'ELT',
+  FOOD = 'FD',
+}
+export enum CategoryType {
+  APPLIANCE = 'APL',
+}
 class CreateProductDto {
   @IsNotEmpty()
   @IsInt()
-  @Min(0)
+  @Min(10)
   @ApiProperty()
   cost!: number
 
   @IsNotEmpty()
   @IsInt()
-  @Min(0)
+  @Min(10)
   @ApiProperty()
   units!: number
 
   @IsNotEmpty()
   @IsInt()
-  @Min(0)
+  @Min(15)
   @ApiProperty()
   sellingPrice!: number
+
+  @IsNotEmpty()
+  @IsInt()
+  @Min(0)
+  @ApiProperty()
+  discount!: number
 
   @IsNotEmpty()
   @IsDateString()
@@ -48,19 +69,29 @@ class CreateProductDto {
   productName!: string
 
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  sku!: string
+  @IsEnum(ProductCategory)
+  @ApiProperty({
+    type: 'enum',
+    enum: ProductCategory,
+    description: 'The category of the product',
+    enumName: 'ProductCategory',
+  })
+  category!: ProductCategory
 
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  type!: string
+  @IsEnum(CategoryType)
+  @ApiProperty({
+    type: 'enum',
+    enum: CategoryType,
+    description: 'The type of product under the product category',
+    enumName: 'CategoryType',
+  })
+  type!: CategoryType
 
-  @IsNotEmpty()
+  @IsOptional()
   @IsString()
-  @ApiProperty()
-  csv!: string
+  @ApiProperty({ nullable: true })
+  csv?: string
 
   @IsNotEmpty()
   @IsString()
@@ -74,10 +105,4 @@ class CreateProductDto {
   repairMargin!: number
 }
 
-export enum ProductCategory {
-  ELECTRONICS = 'elt',
-}
-
-// SKU-number-category-product-date
-// SKU-1-ELT-LP-2024-01
 export default CreateProductDto

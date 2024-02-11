@@ -51,8 +51,8 @@ class Product {
   @Column('integer')
   repairMargin!: number
 
-  @Column('text')
-  csv!: string
+  @Column('text', { nullable: true })
+  csv?: string
 
   @Column('text')
   location!: string
@@ -66,13 +66,10 @@ class Product {
   @UpdateDateColumn()
   updated!: Date
 
-  @Column('json', { nullable: true }) // TODO: possibility of different views
+  @Column('json', { nullable: true, default: [] }) // TODO: possibility of different views
   images!: string[]
 
-  @OneToMany(
-    () => BinCard,
-    (binCard) => binCard.product,
-  )
+  @OneToMany(() => BinCard, binCard => binCard.product)
   binCards!: BinCard[]
 }
 

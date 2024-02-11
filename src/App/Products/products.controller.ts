@@ -6,12 +6,16 @@ import {
   Body,
   Param,
   Put,
+  Res,
+  HttpStatus,
 } from '@nestjs/common'
-import { ApiTags } from '@nestjs/swagger'
-
+import { Response } from 'express'
+import { ApiBody, ApiTags, PartialType } from '@nestjs/swagger'
 import Product from '../../Database/Entities/product.entity'
 import ProductsService from './products.service'
 import CreateProductDto from './product.dto'
+
+export class UpdateProductDto extends PartialType(CreateProductDto) {}
 
 @ApiTags('Products')
 @Controller('products')
@@ -24,22 +28,77 @@ class ProductsController {
   }
 
   @Get(':id')
-  async getProduct(@Param('id') id: string): Promise<Product | null> {
-    return this.productsService.product(id)
+  async getProduct(@Param('id') id: string, @Res() res: Response) {
+    try {
+      const product = await this.productsService.product(id)
+      if (!product) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          status: HttpStatus.NOT_FOUND,
+          message: `Product with ${id} not found`,
+        })
+      }
+      return res.json(product)
+    } catch (error) {
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        message: 'Unprocessable entity',
+      })
+    }
   }
 
   @Post('/add')
-  async addProducts(@Request() req: any, @Body() product: CreateProductDto) {
-    return this.productsService.createProduct(product)
+  async addProducts(
+    @Request() req: any,
+    @Res() res: Response,
+    @Body() product: CreateProductDto,
+  ) {
+    try {
+      if (product?.sellingPrice < product?.cost) {
+        return res.status(HttpStatus.NOT_FOUND).json({
+          status: HttpStatus.NOT_FOUND,
+          message: `Selling price cannot be less than cost`,
+        })
+      }
+      const newProduct = await this.productsService.createProduct(product)
+      return res.json(newProduct)
+    } catch (error) {
+      console.error('Error in product update controller:', error)
+      return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+        status: HttpStatus.UNPROCESSABLE_ENTITY,
+        message: 'Unprocessable entity',
+      })
+    }
   }
 
   @Put(':id')
+  @ApiBody({ type: UpdateProductDto })
   async updateProduct(
     @Request() req: any,
     @Param('id') id: string,
-    @Body() product: CreateProductDto,
+    @Res() res: Response,
+    @Body() productUpdate: UpdateProductDto,
   ) {
-    return this.productsService.updateProduct(id, product)
+    const existProduct = await this.productsService.product(id)
+    if (!existProduct) {
+      return res.status(HttpStatus.NOT_FOUND).json({
+        status: HttpStatus.NOT_FOUND,
+        message: `Product with ID ${id} not found`,
+      })
+    }
+    const updatedProduct = await this.productsService.updateProduct(
+      existProduct,
+      productUpdate,
+    )
+    if (updatedProduct) {
+      return res.status(HttpStatus.CREATED).json({
+        status: HttpStatus.CREATED,
+        message: `Product updated successfully`,
+      })
+    }
+    return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+      status: HttpStatus.UNPROCESSABLE_ENTITY,
+      message: 'Unprocessable entity',
+    })
   }
 }
 

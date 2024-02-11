@@ -1,10 +1,18 @@
 import { Injectable } from '@nestjs/common'
-import { UpdateResult } from 'typeorm'
 import ProductsRepository from './products.repository'
 import Product from '../../Database/Entities/product.entity'
-import CreateProductDto from './product.dto'
+import CreateProductDto, { ProductCategory } from './product.dto'
 import PriceHistoryService from '../PriceHistory/priceHistory.service'
 import { EntityType } from '../../Database/Entities/priceHistory.entity'
+
+function getCurrentDate() {
+  const today = new Date()
+  const year = today.getFullYear()
+  const month = String(today.getMonth() + 1).padStart(2, '0') // Months are zero-based
+  const day = String(today.getDate()).padStart(2, '0')
+
+  return `${year}${month}${day}`
+}
 
 @Injectable()
 class ProductsService {
@@ -13,48 +21,77 @@ class ProductsService {
     private readonly priceHistoryService: PriceHistoryService,
   ) {}
 
-  async products() {
-    return this.productsRepository.find({ take: 10 })
+  async products(): Promise<Product[]> {
+    return this.productsRepository.find({
+      take: 10,
+      order: {
+        created: 'DESC',
+      },
+    })
   }
 
   async product(id: string) {
-    return this.productsRepository.findOneBy({ id })
+    let product
+    try {
+      product = await this.productsRepository.findProduct(id)
+    } catch (e: any) {
+      console.log(e)
+    }
+    return product
   }
 
-  async createProduct(product: CreateProductDto) {
+  async generateSKU(category: ProductCategory, name: string): Promise<string> {
+    return `SKU-${category}-${name.substring(0, 3)}-${getCurrentDate()}`
+  }
+
+  async createProduct(product: CreateProductDto): Promise<Product> {
+    const sku = await this.generateSKU(product.category, product.productName)
     const newProduct = this.productsRepository.create({
       ...product,
       repairMargin: product.sellingPrice - product.cost,
+      sku,
     })
     const createdProduct = await this.productsRepository.save(newProduct)
     return createdProduct
   }
 
   async updateProduct(
-    id: string,
+    product: Product,
     updatedData: Partial<Product>,
-  ): Promise<UpdateResult> {
-    const product = await this.productsRepository.findOneBy({ id })
+  ): Promise<boolean> {
+    let data = updatedData
 
-    if (!product) {
-      throw new Error(`Product with id ${id} not found`)
+    if (
+      updatedData.sellingPrice !== undefined &&
+      updatedData.sellingPrice !== product.sellingPrice
+    ) {
+      data = {
+        ...updatedData,
+        repairMargin: updatedData.sellingPrice - product.cost,
+      }
+      await this.priceHistoryService.updatePriceHistory({
+        id: product.id,
+        updatedData,
+        entity: product,
+        type: EntityType.PRODUCT,
+      })
     }
-
-    await this.priceHistoryService.updatePriceHistory({
-      id,
-      updatedData,
-      entity: product,
-      type: EntityType.PRODUCT,
-    })
-
     const updateResult = await this.productsRepository
       .createQueryBuilder()
       .update()
-      .set({ ...updatedData })
-      .where({ id })
+      .set({ ...data })
+      .where({ id: product.id })
       .execute()
 
-    return updateResult
+    if (
+      updateResult &&
+      updateResult.affected !== undefined &&
+      updateResult.affected > 0
+    ) {
+      return true
+    }
+
+    return false
   }
 }
 

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common'
-import { In, UpdateResult } from 'typeorm'
+import { UpdateResult } from 'typeorm'
 import BundlesRepository from './bundles.repository'
 import Bundle from '../../Database/Entities/bundle.entity'
 import ProductsRepository from '../Products/products.repository'
@@ -15,19 +15,78 @@ class BundlesService {
     private readonly priceHistoryService: PriceHistoryService,
   ) {}
 
-  async createBundle(bundleData: CreateBundleDto): Promise<Bundle> {
-    const bundle = this.bundlesRepository.create(bundleData)
-
-    const products = await this.productsRepository.find({
-      where: {
-        id: In(bundleData.productIds),
+  async bundles(): Promise<Bundle[]> {
+    return this.bundlesRepository.find({
+      take: 10,
+      order: {
+        created: 'DESC',
       },
     })
+  }
 
-    bundle.products = products.map((e) => ({
-      id: e.id,
-      units: e.units,
-    }))
+  async bundle(id: string) {
+    let product
+    try {
+      product = await this.bundlesRepository.findBundle(id)
+    } catch (e: any) {
+      console.log(e)
+    }
+    return product
+  }
+
+  async createBundle(bundleData: CreateBundleDto): Promise<Bundle> {
+    let totalCostPrice = 0
+    for (const productInfo of bundleData.productIds) {
+      const product = await this.productsRepository.findOneBy({
+        id: productInfo.id,
+      })
+
+      if (!product) {
+        throw new Error(`Product with ID ${productInfo.id} not found`)
+      }
+
+      const totalProductsNeeded = productInfo.units * bundleData.quantity
+      console.log(product.units , totalProductsNeeded)
+      if (product.units < totalProductsNeeded) {
+        throw new Error('Not enough products to create bundle')
+      }
+
+      totalCostPrice += bundleData.quantity * (product.cost * productInfo.units)
+    }
+
+    // Step 2: Check bundle selling price
+    if (bundleData.sellingPrice < totalCostPrice) {
+      throw new Error(
+        `Bundle selling price ${bundleData.sellingPrice} cannot be less than bundle cost price ${totalCostPrice}`,
+      )
+
+      // use callbck to finish it up
+    }
+
+    await Promise.all(
+      bundleData.productIds.map(async productInfo => {
+        const product = await this.productsRepository.findOneBy({
+          id: productInfo.id,
+        })
+
+        if (!product) {
+          // Handle error or log
+          return
+        }
+
+        const totalProductsNeeded = productInfo.units * bundleData.quantity
+        product.units -= totalProductsNeeded
+        await this.productsRepository.save(product)
+      }),
+    )
+
+    const bundle = this.bundlesRepository.create({
+      ...bundleData,
+      costPrice: totalCostPrice,
+      margin: bundleData.sellingPrice - totalCostPrice,
+    })
+    bundle.products = { ...bundleData.productIds }
+
     const newBundle = await this.bundlesRepository.save(bundle)
     return newBundle
   }
