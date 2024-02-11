@@ -46,7 +46,7 @@ class BundlesService {
       }
 
       const totalProductsNeeded = productInfo.units * bundleData.quantity
-      console.log(product.units , totalProductsNeeded)
+      console.log(product.units, totalProductsNeeded)
       if (product.units < totalProductsNeeded) {
         throw new Error('Not enough products to create bundle')
       }
@@ -64,7 +64,7 @@ class BundlesService {
     }
 
     await Promise.all(
-      bundleData.productIds.map(async productInfo => {
+      bundleData.productIds.map(async (productInfo) => {
         const product = await this.productsRepository.findOneBy({
           id: productInfo.id,
         })

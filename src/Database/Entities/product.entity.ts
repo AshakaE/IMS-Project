@@ -69,7 +69,10 @@ class Product {
   @Column('json', { nullable: true, default: [] }) // TODO: possibility of different views
   images!: string[]
 
-  @OneToMany(() => BinCard, binCard => binCard.product)
+  @OneToMany(
+    () => BinCard,
+    (binCard) => binCard.product,
+  )
   binCards!: BinCard[]
 }
 
