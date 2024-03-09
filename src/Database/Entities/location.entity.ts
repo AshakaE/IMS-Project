@@ -33,7 +33,10 @@ class Location {
   @UpdateDateColumn()
   updated!: Date
 
-  @ManyToOne(() => User, user => user.locations)
+  @ManyToOne(
+    () => User,
+    (user) => user.locations,
+  )
   @JoinColumn({ name: 'userId' })
   user!: User
 }

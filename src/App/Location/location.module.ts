@@ -12,7 +12,14 @@ import AuthService from '../Auth/auth.service'
 @Module({
   controllers: [LocationsController],
   imports: [UsersModule, MailModule],
-  providers: [LocationsService, LocationsRepository, UsersRepository, UserService, AuthService, JwtService],
+  providers: [
+    LocationsService,
+    LocationsRepository,
+    UsersRepository,
+    UserService,
+    AuthService,
+    JwtService,
+  ],
 })
 class LocationsModule {}
 

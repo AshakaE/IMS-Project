@@ -45,11 +45,11 @@ class BundlesService {
         throw new Error(`Product with ID ${productInfo.id} not found`)
       }
 
-    //   const totalProductsNeeded = productInfo.units * bundleData.quantity
+      //   const totalProductsNeeded = productInfo.units * bundleData.quantity
 
-    //   if (product.units < totalProductsNeeded) {
-    //     throw new Error('Not enough products to create bundle')
-    //   }
+      //   if (product.units < totalProductsNeeded) {
+      //     throw new Error('Not enough products to create bundle')
+      //   }
 
       totalCostPrice += bundleData.quantity * (product.cost * productInfo.units)
     }

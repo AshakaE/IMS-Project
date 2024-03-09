@@ -20,7 +20,7 @@ class MailService {
     const t = nodemailer.createTransport({
       host: 'smtp.ethereal.email',
       port: 587,
-      secure: false, 
+      secure: false,
       auth: {
         user: 'destinee.breitenberg71@ethereal.email', // TODO: create prod email
         pass: '782A3SYNUUgt1TuUf1',

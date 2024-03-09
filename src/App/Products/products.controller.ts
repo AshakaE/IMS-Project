@@ -81,36 +81,36 @@ class ProductsController {
     }
   }
 
-//   @Put(':id')
-//   @ApiBody({ type: UpdateProductDto })
-//   async updateProduct(
-//     @Request() req: any,
-//     @Param('id') id: string,
-//     @Res() res: Response,
-//     @Body() productUpdate: UpdateProductDto,
-//   ) {
-//     const existProduct = await this.productsService.product(id)
-//     if (!existProduct) {
-//       return res.status(HttpStatus.NOT_FOUND).json({
-//         status: HttpStatus.NOT_FOUND,
-//         message: `Product with ID ${id} not found`,
-//       })
-//     }
-//     const updatedProduct = await this.productsService.updateProduct(
-//       existProduct,
-//       productUpdate,
-//     )
-//     if (updatedProduct) {
-//       return res.status(HttpStatus.CREATED).json({
-//         status: HttpStatus.CREATED,
-//         message: 'Product updated successfully',
-//       })
-//     }
-//     return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
-//       status: HttpStatus.UNPROCESSABLE_ENTITY,
-//       message: 'Unprocessable entity',
-//     })
-//   }
+  //   @Put(':id')
+  //   @ApiBody({ type: UpdateProductDto })
+  //   async updateProduct(
+  //     @Request() req: any,
+  //     @Param('id') id: string,
+  //     @Res() res: Response,
+  //     @Body() productUpdate: UpdateProductDto,
+  //   ) {
+  //     const existProduct = await this.productsService.product(id)
+  //     if (!existProduct) {
+  //       return res.status(HttpStatus.NOT_FOUND).json({
+  //         status: HttpStatus.NOT_FOUND,
+  //         message: `Product with ID ${id} not found`,
+  //       })
+  //     }
+  //     const updatedProduct = await this.productsService.updateProduct(
+  //       existProduct,
+  //       productUpdate,
+  //     )
+  //     if (updatedProduct) {
+  //       return res.status(HttpStatus.CREATED).json({
+  //         status: HttpStatus.CREATED,
+  //         message: 'Product updated successfully',
+  //       })
+  //     }
+  //     return res.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+  //       status: HttpStatus.UNPROCESSABLE_ENTITY,
+  //       message: 'Unprocessable entity',
+  //     })
+  //   }
 }
 
 export default ProductsController

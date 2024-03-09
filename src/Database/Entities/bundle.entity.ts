@@ -51,11 +51,17 @@ class Bundle {
   @UpdateDateColumn()
   updated!: Date
 
-  @ManyToOne(() => User, user => user.bundles)
+  @ManyToOne(
+    () => User,
+    (user) => user.bundles,
+  )
   @JoinColumn({ name: 'userId' })
   user!: User
 
-  @OneToMany(() => BinCard, binCard => binCard.bundle)
+  @OneToMany(
+    () => BinCard,
+    (binCard) => binCard.bundle,
+  )
   binCards!: BinCard[]
 }
 

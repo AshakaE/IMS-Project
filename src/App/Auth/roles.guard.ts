@@ -1,10 +1,14 @@
-import { Injectable, CanActivate, ExecutionContext, SetMetadata } from '@nestjs/common'
+import {
+  Injectable,
+  CanActivate,
+  ExecutionContext,
+  SetMetadata,
+} from '@nestjs/common'
 import { Reflector } from '@nestjs/core'
 import { Role } from '../../Database/Entities/user.entity'
 
 export const ROLES_KEY = 'roles'
 export const Roles = (...roles: Role[]) => SetMetadata(ROLES_KEY, roles)
-
 
 @Injectable()
 class RolesGuard implements CanActivate {
@@ -24,7 +28,7 @@ class RolesGuard implements CanActivate {
       return false
     }
 
-    return requiredRoles.every(role => user.roles.includes(role))
+    return requiredRoles.every((role) => user.roles.includes(role))
   }
 }
 

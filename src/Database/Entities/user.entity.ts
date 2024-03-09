@@ -37,7 +37,7 @@ class User {
 
   @Column('text')
   company!: string
-  
+
   @Column('text')
   password!: string
 
@@ -59,13 +59,22 @@ class User {
   })
   status!: boolean
 
-  @OneToMany(() => Location, location => location.user)
+  @OneToMany(
+    () => Location,
+    (location) => location.user,
+  )
   locations!: Location[]
 
-  @OneToMany(() => Product, product => product.user)
+  @OneToMany(
+    () => Product,
+    (product) => product.user,
+  )
   products!: Product[]
 
-  @OneToMany(() => Bundle, bundles => bundles.user)
+  @OneToMany(
+    () => Bundle,
+    (bundles) => bundles.user,
+  )
   bundles!: Bundle[]
 }
 

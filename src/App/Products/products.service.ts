@@ -49,7 +49,7 @@ class ProductsService {
     userId: string,
   ): Promise<Product> {
     try {
-        console.log(product, userId)
+      console.log(product, userId)
       return {} as Product
     } catch (e) {
       console.error('nammenme', e)
