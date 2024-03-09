@@ -94,15 +94,20 @@ class CreateProductDto {
   csv?: string
 
   @IsNotEmpty()
-  @IsString()
-  @ApiProperty()
-  location!: string
-
-  @IsNotEmpty()
   @IsInt()
   @Min(0)
   @ApiProperty()
   repairMargin!: number
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  companyId!: string
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  locationId!: string
 }
 
 export default CreateProductDto

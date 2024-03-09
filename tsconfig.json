@@ -3,11 +3,8 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "dist",
-    "experimentalDecorators": true
+    "experimentalDecorators": true,
   },
-  "include": [
-    "src/",
-    "test/"
-  ],
-  "exclude": ["node_modules", "uploads"]
+  "include": ["src/", "test/", "Company"],
+  "exclude": ["node_modules", "uploads"],
 }

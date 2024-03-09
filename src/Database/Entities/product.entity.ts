@@ -6,9 +6,11 @@ import {
   UpdateDateColumn,
   OneToMany,
   PrimaryGeneratedColumn,
+  JoinColumn,
+  ManyToOne,
 } from 'typeorm'
-// import Category from './category.entity'
 import BinCard from './bin.entity'
+import User from './user.entity'
 
 @Entity()
 class Product {
@@ -17,12 +19,6 @@ class Product {
 
   @Column()
   cost!: number
-
-  @Column()
-  units!: number
-
-  @Column({ default: 0 }) // depends on location
-  tax?: number
 
   @Column({ type: 'decimal', precision: 5, scale: 2, default: 0 }) // in percent
   discount?: number
@@ -40,7 +36,10 @@ class Product {
   reStockLevel?: number
 
   @Column()
-  productName!: string
+  brand!: string
+
+  @Column()
+  name!: string
 
   @Column('varchar')
   sku!: string
@@ -54,9 +53,6 @@ class Product {
   @Column('text', { nullable: true })
   csv?: string
 
-  @Column('text')
-  location!: string
-
   //   @Column('json')
   //   category!: Category[]
 
@@ -69,11 +65,12 @@ class Product {
   @Column('json', { nullable: true, default: [] }) // TODO: possibility of different views
   images!: string[]
 
-  @OneToMany(
-    () => BinCard,
-    (binCard) => binCard.product,
-  )
+  @OneToMany(() => BinCard, binCard => binCard.product)
   binCards!: BinCard[]
+
+  @ManyToOne(() => User, user => user.products)
+  @JoinColumn({ name: 'userId' })
+  user!: User
 }
 
 export default Product

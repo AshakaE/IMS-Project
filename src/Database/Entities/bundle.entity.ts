@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 // bundle.entity.ts
 
 import {
@@ -8,8 +9,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   PrimaryGeneratedColumn,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm'
 import Product from './product.entity'
+import BinCard from './bin.entity'
+import User from './user.entity'
 
 @Entity()
 class Bundle {
@@ -44,6 +50,13 @@ class Bundle {
 
   @UpdateDateColumn()
   updated!: Date
+
+  @ManyToOne(() => User, user => user.bundles)
+  @JoinColumn({ name: 'userId' })
+  user!: User
+
+  @OneToMany(() => BinCard, binCard => binCard.bundle)
+  binCards!: BinCard[]
 }
 
 export default Bundle

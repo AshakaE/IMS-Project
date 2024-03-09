@@ -44,15 +44,26 @@ class ProductsService {
     return `SKU-${category}-${name.substring(0, 3)}-${getCurrentDate()}`
   }
 
-  async createProduct(product: CreateProductDto): Promise<Product> {
-    const sku = await this.generateSKU(product.category, product.productName)
-    const newProduct = this.productsRepository.create({
-      ...product,
-      repairMargin: product.sellingPrice - product.cost,
-      sku,
-    })
-    const createdProduct = await this.productsRepository.save(newProduct)
-    return createdProduct
+  async createProduct(
+    product: CreateProductDto,
+    userId: string,
+  ): Promise<Product> {
+    try {
+        console.log(product, userId)
+      return {} as Product
+    } catch (e) {
+      console.error('nammenme', e)
+      return {} as Product
+    }
+
+    // const sku = await this.generateSKU(product.category, product.productName)
+    // const newProduct = this.productsRepository.create({
+    //   ...product,
+    //   repairMargin: product.sellingPrice - product.cost,
+    //   sku,
+    // })
+    // const createdProduct = await this.productsRepository.save(newProduct)
+    // return createdProduct
   }
 
   async updateProduct(

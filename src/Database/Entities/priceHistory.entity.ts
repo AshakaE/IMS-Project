@@ -7,8 +7,8 @@ export enum EntityType {
 
 @Entity()
 class PriceHistory {
-  @PrimaryGeneratedColumn()
-  id!: number
+  @PrimaryGeneratedColumn('uuid')
+  id!: string
 
   @Column()
   entityId!: string

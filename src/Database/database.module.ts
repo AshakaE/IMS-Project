@@ -6,6 +6,8 @@ import ProductPriceHistory from './Entities/priceHistory.entity'
 import Bundle from './Entities/bundle.entity'
 import Category from './Entities/category.entity'
 import BinCard from './Entities/bin.entity'
+import User from './Entities/user.entity'
+import Location from './Entities/location.entity'
 
 @Module({
   imports: [
@@ -18,10 +20,18 @@ import BinCard from './Entities/bin.entity'
         username: configService.get('DATABASE_USERNAME'),
         password: configService.get('DATABASE_PASS'),
         database: configService.get('DATABASE_NAME'),
-        entities: [Product, ProductPriceHistory, Bundle, Category, BinCard],
+        entities: [
+          User,
+          Bundle,
+          Product,
+          BinCard,
+          Category,
+          Location,
+          ProductPriceHistory,
+        ],
         synchronize: true,
         keepConnectionAlive: true,
-        // logging: true,
+        logging: true,
       }),
       inject: [ConfigService],
     }),

@@ -55,7 +55,7 @@ class BundlesController {
       //   status: HttpStatus.NOT_FOUND,
       //   message: `Selling price cannot be less than cost`,
       // })
-      console.log(bundle)
+    //   console.log(bundle)
       const newBundle = await this.bundlesService.createBundle(bundle)
       return res.json(newBundle)
     } catch (error: any) {
